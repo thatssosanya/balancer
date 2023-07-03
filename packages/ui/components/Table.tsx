@@ -35,26 +35,28 @@ const Table = ({ headings, data }: Props) => {
           }
         </StyledTbody>
         <tfoot>
-          <td colSpan={ headings.length + 1 }>
-            <StyledFooter>
-              <Button
-                onClick={ () => { } }
-                iconBefore={ <Icon type="circle" /> }
-                size="sm"
-                variant="transparent"
-              >
-                Prev
-              </Button>
-              <Button
-                onClick={ () => { } }
-                iconAfter={ <Icon type="circle" /> }
-                size="sm"
-                variant="transparent"
-              >
-                Next
-              </Button>
-            </StyledFooter>
-          </td>
+          <tr>
+            <td colSpan={ headings.length + 1 }>
+              <StyledFooter>
+                <Button
+                  onClick={ () => { } }
+                  iconBefore={ <Icon type="circle" /> }
+                  size="sm"
+                  variant="transparent"
+                >
+                  Prev
+                </Button>
+                <Button
+                  onClick={ () => { } }
+                  iconAfter={ <Icon type="circle" /> }
+                  size="sm"
+                  variant="transparent"
+                >
+                  Next
+                </Button>
+              </StyledFooter>
+            </td>
+          </tr>
         </tfoot>
       </StyledTable>
     </StyledContainer>
