@@ -5,7 +5,7 @@ import { styled } from "styled-components"
 import { Container, Table } from "ui/components"
 import { minWXl } from "ui/breakpoints"
 import { useMetamaskStore, useHydratedStore } from "../store"
-import { useTokenData, useFirstRender, useMetamaskHandling } from "./hooks"
+import { useTokenData as useTokenQueries, useFirstRender, useMetamaskHandling } from "./hooks"
 
 const Page = () => {
   const accounts = useHydratedStore(useMetamaskStore, ({ accounts }) => accounts)
@@ -13,11 +13,11 @@ const Page = () => {
 
   useMetamaskHandling()
 
-  const balances = useTokenData(accounts?.[0])
+  const tokenQueries = useTokenQueries(accounts?.[0])
 
   const router = useRouter()
   const firstRender = useFirstRender()
-  if (firstRender) {
+  if (firstRender || tokenQueries.some(q => q.isInitialLoading)) {
     return Loading
   }
 
@@ -38,6 +38,7 @@ const Page = () => {
       </Container>
     )
   }
+  console.log(tokenQueries)
 
   return (
     <AssetsContainer>
@@ -50,11 +51,11 @@ const Page = () => {
             { key: "symbol", title: "Token" },
             { key: "balance", title: "Balance" },
             { key: "value", title: "Value" },
-            { key: "vsUsd", title: "Price per" },
+            { key: "usdRate", title: "Price per" },
             { key: "marketCap", title: "Market Cap" },
           ]
         }
-        data={ balances }
+        data={ tokenQueries.map(({ data }) => data).filter(Boolean) }
       />
     </AssetsContainer>
   )

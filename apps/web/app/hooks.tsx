@@ -42,25 +42,28 @@ export const useTokenData = (account) => {
         queryKey: [symbol],
         queryFn: async () => {
           const erc20 = Erc20__factory.connect(address, ethers)
-          const [balance, assets] = await Promise.all([
+          const [weiBalance, assets] = await Promise.all([
             erc20.balanceOf(account),
             fetch(`${ process.env.NEXT_PUBLIC_API_URL }/assets?symbols=${ symbol.toLowerCase() }`)
               .then(r => r.json()) as Promise<{ vsUsd: string, marketCap: string }[]>
           ])
-          const formattedBalance = formatEther(balance)
-          const vsUsd = parseFloat(assets[0].vsUsd)
+          const balance = formatEther(weiBalance)
+          const vsUsd = parseFloat(assets[0]?.vsUsd)
+          const value = vsUsd ? "$" + (parseFloat(balance) * vsUsd).toFixed(2) : "No data"
+          const usdRate = vsUsd ? "$" + vsUsd.toFixed(2) : "No data"
+          const marketCap = vsUsd ? "$" + parseFloat(assets[0]?.marketCap)?.toFixed(2) : "No data"
           return {
             symbol,
-            balance: formattedBalance,
-            value: "$" + (parseFloat(formattedBalance) * vsUsd).toFixed(2),
-            vsUsd: "$" + vsUsd.toFixed(2),
-            marketCap: "$" + parseFloat(assets[0].marketCap).toFixed(2),
+            balance,
+            value,
+            usdRate,
+            marketCap,
           }
         }
       }))
     : []
   })
-  return queries.map(({ data }) => data).filter(Boolean)
+  return queries
 }
 
 export const useFirstRender = () => {
