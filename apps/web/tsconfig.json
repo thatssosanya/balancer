@@ -6,14 +6,15 @@
         "name": "next"
       }
     ],
-    "isolatedModules": true
+    "isolatedModules": true,
+    "strict": false
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/StyledComponentsRegistry.tsx"  ],
   "exclude": [
     "node_modules"
   ]
